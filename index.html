@@ -30,15 +30,16 @@
 <div id="minesweeper">
 </div>
 
+        <script src="./out/tile.js"></script>
         <script src="./out/minesweeper.js"></script>
         <script>
             const ms_view = document.getElementById("minesweeper");
             const ms_table = document.createElement("table");
             ms_view.appendChild(ms_table);
-            const width = 20;
-            const height = 25;
+            const width = 10;
+            const height = 15;
            
-            let ms = new MineSweeper(width, height, 400);
+            let ms = new MineSweeper(width, height, 15);
             ms.print_board();
             
             function print_table(table) {
@@ -82,7 +83,6 @@
                 const x = parseInt(ev.target.attributes["x"].value);
                 const y = parseInt(ev.target.attributes["y"].value);
                 ms.play(x, y);
-                ms.print_board2();
                 
                 ms_table.innerHTML = "";
                 print_table(ms.get_board_view());

@@ -4,23 +4,25 @@ class MineSweeper {
 
     private width: number;
     private height: number;
-    private board: number[][];
-    private board_masq: boolean[][];
+    private board: Tile[][];
     private nb_mines: number;
 
 
     constructor(width: number, height: number, nb_mines: number) {
         this.width = width;
         this.height = height;
-        this.board = new Array(width).fill(0)
-                            .map(() => new Array(height).fill(0));
-        this.board_masq = new Array(width).fill(0)
-                            .map(() => new Array(height).fill(false));
+        this.board = new Array(width);
+        for (let x = 0; x < this.width; x++) {
+            this.board[x] = new Array(height);
+            for (let y = 0; y < this.height; y++) {
+                this.board[x][y] = new Tile(0);
+            }
+        }
         this.nb_mines = nb_mines;
         if (nb_mines >= height * width) {
             throw "nb_mine > nb_tiles";
         }
-        this.add_mines()
+        this.add_mines();
         this.add_indicators();
     }
 
@@ -29,11 +31,7 @@ class MineSweeper {
                                   .map(() => new Array(this.height).fill(0));
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                if (this.board_masq[x][y]) {
-                    ret[x][y] = this.board[x][y];
-                } else {
-                    ret[x][y] = 10;
-                }
+                ret[x][y] = this.board[x][y].get_value();
             }
         }
         return ret;
@@ -45,29 +43,30 @@ class MineSweeper {
         if (y < 0) return true;
         if (y >= this.height) return true;
 
-        if (this.board[x][y] == 0) {
+        if (this.board[x][y].value == 0) {
             this.uncover_blanc_tiles(x, y);
-        } else if (this.board[x][y] == -1) {
-            for (let r of this.board_masq) {
-                r.fill(true);
+        } else if (this.board[x][y].value == -1) {
+            for (let r of this.board) {
+                for (let r2 of r) {
+                    r2.uncovered = true;
+                }
             }
         } else {
-            this.board_masq[x][y] = true;
+            this.board[x][y].uncovered = true;
         }
-        return this.board[x][y] != -1;
+        return this.board[x][y].value != -1;
     }
 
     private uncover_blanc_tiles(x: number, y: number) {
-        console.log(x, y);
         if (x < 0) return;
         if (x >= this.width) return;
         if (y < 0) return;
         if (y >= this.height) return;
-        if (this.board_masq[x][y]) return;
+        if (this.board[x][y].uncovered) return;
 
-        this.board_masq[x][y] = true;
+        this.board[x][y].uncovered = true;
 
-        if (this.board[x][y] != 0) {
+        if (this.board[x][y].value != 0) {
             return;
         } else {
             this.uncover_blanc_tiles(x    , y - 1);
@@ -80,13 +79,18 @@ class MineSweeper {
     private add_mines() {
         for (let i = 0; i < this.nb_mines; i++) {
             let placed: boolean = false;
+            let tries = 0;
             while (! placed) {
                 let x: number = Math.round(Math.random() * (this.width - 1));
                 let y: number = Math.round(Math.random() * (this.height - 1));
 
-                if (this.board[x][y] != -1) {
-                    this.board[x][y] = -1;
+                if (this.board[x][y].value != -1) {
+                    this.board[x][y].value = -1;
                     placed = true;
+                } else {
+                    tries++;
+
+                    if (tries > 300) throw "infinite loop";
                 }
             }
         }
@@ -97,9 +101,9 @@ class MineSweeper {
         if (x >= this.width) return;
         if (y < 0) return;
         if (y >= this.height) return;
-        if (this.board[x][y] == -1) return;
+        if (this.board[x][y].value == -1) return;
 
-        this.board[x][y]++;
+        this.board[x][y].value++;
     }
 
     private inc_square(x: number, y: number) {
@@ -116,7 +120,7 @@ class MineSweeper {
     private add_indicators() {
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                if (this.board[x][y] == -1) {
+                if (this.board[x][y].value == -1) {
                     this.inc_square(x, y);
                 }
             }
@@ -128,31 +132,12 @@ class MineSweeper {
             let line: (string|number)[] = new Array(this.height);
             let i = 0;
             for (let y = 0; y < this.height; y++) {
-                if (this.board[x][y] == -1) {
+                if (this.board[x][y].value == -1) {
                     line[i] = "B";
-                } else if (this.board[x][y] == 0) {
+                } else if (this.board[x][y].value == 0) {
                     line[i] = " ";
                 } else {
-                    line[i] = this.board[x][y];
-                }
-                i++;
-            }
-            console.log(line.join());
-        }
-    }
-
-    print_board2() {
-        const b2 = this.get_board_view();
-        for (let x = 0; x < this.width; x++) {
-            let line: (string|number)[] = new Array(this.height);
-            let i = 0;
-            for (let y = 0; y < this.height; y++) {
-                if (b2[x][y] == -1) {
-                    line[i] = "B";
-                } else if (b2[x][y] == 0) {
-                    line[i] = " ";
-                } else {
-                    line[i] = b2[x][y];
+                    line[i] = this.board[x][y].value;
                 }
                 i++;
             }
