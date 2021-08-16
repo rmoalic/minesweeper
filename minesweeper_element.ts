@@ -45,6 +45,15 @@ class MineSweeper_Element extends HTMLElement {
             :host([hidden]) {
                 display: none;
             }
+            ms-tile {
+                display: inline-block;
+                width: 1.2em;
+                height: 1.2em;
+                border: 1px solid black;
+                text-align: center; 
+                vertical-align: middle;
+                margin: 1px;
+            }
         `;
         shadow.appendChild(style);
 
