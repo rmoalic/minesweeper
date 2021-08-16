@@ -53,6 +53,8 @@ class MineSweeper_Element extends HTMLElement {
                 text-align: center; 
                 vertical-align: middle;
                 margin: 1px;
+                font-size: 20px;
+                font-weight: bold;
             }
         `;
         shadow.appendChild(style);

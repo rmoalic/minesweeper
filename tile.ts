@@ -10,7 +10,7 @@ class Tile extends HTMLElement {
         this._value = value;
         this._uncovered = false;
         this._flagged = false;
-        
+
         this.update();
     }
 
@@ -64,10 +64,38 @@ class Tile extends HTMLElement {
                     this.textContent = " ";
                     this.style.backgroundColor = "white";
                     break;
-                default:
+                default: //normal numbers
                     this.textContent = this._value.toString();
                     this.style.backgroundColor = "lightblue";
-            }    
+            }
+            switch (this._value) {
+                case 1:
+                    this.style.color = "blue";
+                    break;
+                case 2:
+                    this.style.color = "darkgreen";
+                    break;
+                case 3:
+                    this.style.color = "red";
+                    break;
+                case 4:
+                    this.style.color = "darkblue";
+                    break;
+                case 5:
+                    this.style.color = "darkred";
+                    break;
+                case 6:
+                    this.style.color = "darkturquoise";
+                    break;
+                case 7:
+                    this.style.color = "darkmagenta";
+                    break;
+                case 7:
+                    this.style.color = "darkorange";
+                    break;
+                default:
+                    this.style.color = "black";
+            }
         }
         if (this._value != -1 && this._flagged && this._uncovered) {
             this.textContent = "🚩";
