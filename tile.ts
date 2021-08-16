@@ -65,6 +65,7 @@ class Tile extends HTMLElement {
                 this.text_span.textContent = "🚩";
                 this.text_span.style.backgroundColor = "lightgray";
             } else {
+                this.text_span.textContent = " ";
                 this.text_span.style.backgroundColor = "grey";
             }
         } else {
@@ -78,6 +79,7 @@ class Tile extends HTMLElement {
                     }
                     break;
                 case 0:
+                    this.text_span.textContent = " ";
                     this.text_span.style.backgroundColor = "white";
                     break;
                 default:
@@ -85,13 +87,9 @@ class Tile extends HTMLElement {
                     this.text_span.style.backgroundColor = "lightblue";
             }    
         }
-    }
-
-    get_value(): number {
-        if (this._uncovered) {
-            return this.value;
-        } else {
-            return 10;
+        if (this._value != -1 && this._flagged && this._uncovered) {
+            this.text_span.textContent = "🚩";
+            this.text_span.style.backgroundColor = "violet";
         }
     }
 }
