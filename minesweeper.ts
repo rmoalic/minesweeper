@@ -26,6 +26,11 @@ class MineSweeper {
         this.add_indicators();
     }
 
+    get_board() {
+        return this.board;
+
+    }
+
     get_board_view() {
         let ret: number[][] = new Array(this.width).fill(0)
                                   .map(() => new Array(this.height).fill(0));
@@ -42,6 +47,7 @@ class MineSweeper {
         if (x >= this.width) return true;
         if (y < 0) return true;
         if (y >= this.height) return true;
+        if (this.board[x][y].flagged) return true;
 
         if (this.board[x][y].value == 0) {
             this.uncover_blanc_tiles(x, y);
@@ -55,6 +61,16 @@ class MineSweeper {
             this.board[x][y].uncovered = true;
         }
         return this.board[x][y].value != -1;
+    }
+
+    flag(x: number, y: number) {
+        if (x < 0) return;
+        if (x >= this.width) return;
+        if (y < 0) return;
+        if (y >= this.height) return;
+        if (this.board[x][y].uncovered) return;
+
+        this.board[x][y].flagged = ! this.board[x][y].flagged;
     }
 
     private uncover_blanc_tiles(x: number, y: number) {
