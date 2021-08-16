@@ -6,8 +6,8 @@ class MineSweeper {
     private height: number;
     private board: Tile[][];
     private nb_mines: number;
-    private is_lost: boolean;
-    private is_won: boolean;
+    private _is_lost: boolean;
+    private _is_won: boolean;
     private remaining_tiles: number;
 
 
@@ -25,11 +25,19 @@ class MineSweeper {
         if (nb_mines >= height * width) {
             throw "nb_mine > nb_tiles";
         }
-        this.is_lost = false;
-        this.is_won = false;
+        this._is_lost = false;
+        this._is_won = false;
         this.remaining_tiles = height * width - nb_mines;
         this.add_mines();
         this.add_indicators();
+    }
+
+    public get is_won(): boolean {
+        return this._is_won;
+    }
+
+    public get is_lost(): boolean {
+        return this._is_lost;
     }
 
     get_board() {
@@ -42,11 +50,11 @@ class MineSweeper {
         if (y < 0) return true;
         if (y >= this.height) return true;
         if (this.board[x][y].flagged) return true;
-        if (this.is_lost || this.is_won) return true;
+        if (this._is_lost || this.is_won) return true;
 
         const is_mine = this.board[x][y].value == -1;
         if (is_mine) {
-            this.is_lost = true;
+            this._is_lost = true;
         }
 
         if (this.board[x][y].value == 0) {
@@ -57,9 +65,9 @@ class MineSweeper {
             this.uncover_tile(x, y);
         }
 
-        if (this.remaining_tiles <= 0) {
+        if (! is_mine && this.remaining_tiles <= 0) {
             this.uncover_mines_and_flags(true);
-            this.is_won = true;
+            this._is_won = true;
         }
 
         return ! is_mine;
@@ -71,7 +79,7 @@ class MineSweeper {
         if (y < 0) return;
         if (y >= this.height) return;
         if (this.board[x][y].uncovered) return;
-        if (this.is_lost || this.is_won) return true;
+        if (this._is_lost || this._is_won) return true;
 
         this.board[x][y].flagged = ! this.board[x][y].flagged;
     }

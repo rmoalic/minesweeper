@@ -2,6 +2,8 @@
 class MineSweeper_Element extends HTMLElement {
 
     private ms: MineSweeper;
+    private status_bar: HTMLDivElement;
+    private status_text: HTMLSpanElement;
 
     constructor() {
         super();
@@ -10,7 +12,16 @@ class MineSweeper_Element extends HTMLElement {
         const height = 15;
         const shadow = this.attachShadow({mode: 'open'});
 
-        this.ms = new MineSweeper(width, height, 15);
+        this.status_bar = document.createElement("div");
+        const pre_status_text = document.createElement("span");
+        pre_status_text.textContent = "Game: ";
+        this.status_text = document.createElement("span");
+        this.status_text.textContent = "Ongoing";
+        this.status_bar.appendChild(pre_status_text);
+        this.status_bar.appendChild(this.status_text);
+        shadow.appendChild(this.status_bar);
+
+        this.ms = new MineSweeper(width, height, 5);
         const table = this.ms.get_board();
         
         for (let x = 0; x < width; x++) {
@@ -42,6 +53,13 @@ class MineSweeper_Element extends HTMLElement {
         } else {
             this.ms.flag(x, y);
         }
+
+        if (this.ms.is_won) {
+            this.status_text.textContent = "WON !!!";
+        } else if (this.ms.is_lost) {
+            this.status_text.textContent = "lost :(";
+        }
+
         return false;
     }
 }
