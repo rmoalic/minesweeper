@@ -55,6 +55,11 @@ class MineSweeper_Element extends HTMLElement {
                 margin: 1px;
                 font-size: 20px;
                 font-weight: bold;
+                user-select: none;
+            }
+            .board {
+                white-space: nowrap;
+                overflow: auto;
             }
         `;
         shadow.appendChild(style);
@@ -71,6 +76,7 @@ class MineSweeper_Element extends HTMLElement {
 
         // game board
         this.game_board = document.createElement("div");
+        this.game_board.classList.add("board");
 
         for (let x = 0; x < height; x++) {
             const ms_row = document.createElement("div");
