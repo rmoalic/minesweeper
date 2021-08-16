@@ -19,24 +19,12 @@ class Tile extends HTMLElement {
         style.innerHTML = `
             span {
                 display: inline-block;
-                width: 2em;
-                height: 2em;
+                width: 1.2em;
+                height: 1.2em;
                 border: 1px solid black;
                 text-align: center; 
                 vertical-align: middle;
                 margin: 1px;
-            }
-            .ms_covered {
-                background-color: gray;
-            }
-            .ms_blank {
-                background-color: white;
-            }
-            .ms_bomb {
-                background-color: red;
-            }
-            .ms_number {
-                background-color: lightblue;
             }
         `;
         shadow.appendChild(style);
@@ -75,26 +63,26 @@ class Tile extends HTMLElement {
         if (! this._uncovered) {
             if (this._flagged) {
                 this.text_span.textContent = "🚩";
+                this.text_span.style.backgroundColor = "lightgray";
             } else {
-                this.text_span.textContent = " ";
+                this.text_span.style.backgroundColor = "grey";
             }
-            this.text_span.className = "";
-            this.text_span.classList.add("ms_covered");
         } else {
             switch (this._value) {
                 case -1:
                     this.text_span.textContent = "💣";
-                    this.text_span.className = "";
-                    this.text_span.classList.add("ms_bomb");
+                    if (this.flagged) {
+                        this.text_span.style.backgroundColor = "green";
+                    } else {
+                        this.text_span.style.backgroundColor = "red";
+                    }
                     break;
                 case 0:
-                    this.text_span.className = "";
-                    this.text_span.classList.add("ms_blank");
+                    this.text_span.style.backgroundColor = "white";
                     break;
                 default:
                     this.text_span.textContent = this._value.toString();
-                    this.text_span.className = "";
-                    this.text_span.classList.add("ms_number");
+                    this.text_span.style.backgroundColor = "lightblue";
             }    
         }
     }
