@@ -31,8 +31,24 @@ class MineSweeper_Element extends HTMLElement {
                 mines = Number.parseInt(tmp);
         }
 
+        this.ms = new MineSweeper(height, width, mines);
+        const table = this.ms.get_board();
         const shadow = this.attachShadow({mode: 'open'});
 
+        // UI init
+        const style = document.createElement("style");
+        style.innerHTML = `
+            :host {
+                display: block;
+                contain: content;
+            }
+            :host([hidden]) {
+                display: none;
+            }
+        `;
+        shadow.appendChild(style);
+
+        // status bar
         this.status_bar = document.createElement("div");
         const pre_status_text = document.createElement("span");
         pre_status_text.textContent = "Game: ";
@@ -42,9 +58,7 @@ class MineSweeper_Element extends HTMLElement {
         this.status_bar.appendChild(this.status_text);
         shadow.appendChild(this.status_bar);
 
-        this.ms = new MineSweeper(height, width, mines);
-        const table = this.ms.get_board();
-        
+        // game board
         this.game_board = document.createElement("div");
 
         for (let x = 0; x < height; x++) {
@@ -86,6 +100,12 @@ class MineSweeper_Element extends HTMLElement {
 
         return false;
     }
+
+    attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null) {
+        if (oldValue == null) return;
+        throw "changing attributes is not supported";
+    }
+    static get observedAttributes() {return ['width', 'lenght', 'mines']; }
 }
 
 customElements.define('ms-element', MineSweeper_Element);

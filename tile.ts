@@ -17,6 +17,10 @@ class Tile extends HTMLElement {
 
         const style = document.createElement("style");
         style.innerHTML = `
+            :host {
+                all: initial;
+                contain: content;
+            }
             span {
                 display: inline-block;
                 width: 1.2em;
