@@ -44,11 +44,11 @@ class MineSweeper_Element extends HTMLElement {
                 margin: 1px;
                 font-size: 20px;
                 font-weight: bold;
-                user-select: none;
             }
             .board {
                 white-space: nowrap;
                 overflow: auto;
+                user-select: none;
             }
         `;
         shadow.appendChild(style);
