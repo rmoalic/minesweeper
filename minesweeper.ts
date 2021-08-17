@@ -18,7 +18,7 @@ class MineSweeper {
         for (let x = 0; x < this.height; x++) {
             this.board[x] = new Array(width);
             for (let y = 0; y < this.width; y++) {
-                this.board[x][y] = new Tile(0);
+                this.board[x][y] = new Tile();
             }
         }
         this.nb_mines = nb_mines;

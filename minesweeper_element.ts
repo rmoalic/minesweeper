@@ -81,7 +81,8 @@ class MineSweeper_Element extends HTMLElement {
         for (let x = 0; x < height; x++) {
             const ms_row = document.createElement("div");
             for (let y = 0; y < width; y++) {
-                const tile_value = table[x][y];
+                const tile_value = new Tile_element();
+                table[x][y].registerObserver(tile_value);
                 tile_value.setAttribute("x", x.toString());
                 tile_value.setAttribute("y", y.toString());
                 tile_value.onclick = this.ms_click.bind(this);
@@ -95,7 +96,7 @@ class MineSweeper_Element extends HTMLElement {
 
     private ms_click(ev: MouseEvent): boolean {
         if (ev.target == null) return false;
-        const target2 = ev.target as Tile;
+        const target2 = ev.target as Tile_element;
         const x_str = target2.getAttribute("x");
         if (x_str == null) return false;
         const y_str = target2.getAttribute("y");
