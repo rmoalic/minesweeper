@@ -113,6 +113,7 @@ class MineSweeper_Element extends HTMLElement {
     }
 
     private reset() {
+        this.status_text.textContent = "Ongoing";
         if (this.attributes_changed) {
             this.saveAttributes();
             this.ms = new MineSweeper(this.height, this.width, this.mines);
