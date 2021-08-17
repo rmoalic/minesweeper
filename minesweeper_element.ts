@@ -5,35 +5,24 @@ class MineSweeper_Element extends HTMLElement {
     private status_bar: HTMLDivElement;
     private status_text: HTMLSpanElement;
     private game_board: HTMLDivElement;
+    private attributes_changed: boolean;
+
+    private height: number;
+    private width: number;
+    private mines: number;
 
 
     constructor() {
         super();
-        let height: number = 15;
-        let width: number = 15;
-        let mines: number = 10;
+        this.height = 15;
+        this.width  = 15;
+        this.mines  = 10;
 
-        if (this.hasAttribute("height")) {
-            const tmp = this.getAttribute("height")
-            if (tmp != null)
-                height = Number.parseInt(tmp);
-        }
-        
-        if (this.hasAttribute("width")) {
-            const tmp = this.getAttribute("width")
-            if (tmp != null)
-                width = Number.parseInt(tmp);
-        }
+        this.attributes_changed = false;
+        this.saveAttributes();
 
-        if (this.hasAttribute("mines")) {
-            const tmp = this.getAttribute("mines")
-            if (tmp != null)
-                mines = Number.parseInt(tmp);
-        }
-
-        this.ms = new MineSweeper(height, width, mines);
-        const table = this.ms.get_board();
         const shadow = this.attachShadow({mode: 'open'});
+        shadow.addEventListener("reset", this.reset);
 
         // UI init
         const style = document.createElement("style");
@@ -78,11 +67,41 @@ class MineSweeper_Element extends HTMLElement {
         this.game_board = document.createElement("div");
         this.game_board.classList.add("board");
 
-        for (let x = 0; x < height; x++) {
+        this.ms = new MineSweeper(this.height, this.width, this.mines);
+        const tiles_data = this.ms.get_board();
+        this.init_table(tiles_data);
+
+
+        shadow.appendChild(this.game_board);
+    }
+
+    private saveAttributes() {
+        if (this.hasAttribute("height")) {
+            const tmp = this.getAttribute("height")
+            if (tmp != null)
+                this.height = Number.parseInt(tmp);
+        }
+        
+        if (this.hasAttribute("width")) {
+            const tmp = this.getAttribute("width")
+            if (tmp != null)
+                this.width = Number.parseInt(tmp);
+        }
+
+        if (this.hasAttribute("mines")) {
+            const tmp = this.getAttribute("mines")
+            if (tmp != null)
+                this.mines = Number.parseInt(tmp);
+        }
+    }
+
+    private init_table(tiles_data: Tile[][]) {
+        this.game_board.innerHTML = "";
+        for (let x = 0; x < this.height; x++) {
             const ms_row = document.createElement("div");
-            for (let y = 0; y < width; y++) {
+            for (let y = 0; y < this.width; y++) {
                 const tile_value = new Tile_element();
-                table[x][y].registerObserver(tile_value);
+                tiles_data[x][y].registerObserver(tile_value);
                 tile_value.setAttribute("x", x.toString());
                 tile_value.setAttribute("y", y.toString());
                 tile_value.onclick = this.ms_click.bind(this);
@@ -91,7 +110,17 @@ class MineSweeper_Element extends HTMLElement {
             }
             this.game_board.appendChild(ms_row);
         }
-        shadow.appendChild(this.game_board);
+    }
+
+    private reset() {
+        if (this.attributes_changed) {
+            this.saveAttributes();
+            this.ms = new MineSweeper(this.height, this.width, this.mines);
+            const tiles_data = this.ms.get_board();
+            this.init_table(tiles_data);    
+        } else {
+            this.ms.reset();
+        }
     }
 
     private ms_click(ev: MouseEvent): boolean {
@@ -120,10 +149,11 @@ class MineSweeper_Element extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null) {
-        if (oldValue == null) return;
-        throw "changing attributes is not supported";
+        if (newValue == null) return;
+        //throw "changing attributes is not supported";
+        this.attributes_changed = true;
     }
-    static get observedAttributes() {return ['width', 'lenght', 'mines']; }
+    static get observedAttributes() {return ['width', 'height', 'mines']; }
 }
 
 customElements.define('ms-element', MineSweeper_Element);

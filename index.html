@@ -6,11 +6,18 @@
     </head>
     <body>
         <ms-element height="16" width="25" mines="25"></ms-element>
+        <button>Reset</button>
 
         <script src="./out/ObservableClass.js"></script>
         <script src="./out/tile_element.js"></script>
         <script src="./out/tile.js"></script>
         <script src="./out/minesweeper.js"></script>
         <script src="./out/minesweeper_element.js"></script>
+
+        <script>
+            const button = document.getElementsByTagName("button")[0];
+            const ms = document.getElementsByTagName("ms-element")[0];
+            button.onclick = () => (ms.reset());
+        </script>
     </body>
 </html>

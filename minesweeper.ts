@@ -6,14 +6,19 @@ class MineSweeper {
     private width: number;
     private board: Tile[][];
     private nb_mines: number;
-    private _is_lost: boolean;
-    private _is_won: boolean;
-    private remaining_tiles: number;
+    private _is_lost!: boolean;
+    private _is_won!: boolean;
+    private remaining_tiles!: number;
 
 
     constructor(height: number, width: number, nb_mines: number) {
         this.height = height;
         this.width = width;
+        this.nb_mines = nb_mines;
+        if (nb_mines >= width * height) {
+            throw "nb_mine > nb_tiles";
+        }
+        
         this.board = new Array(height);
         for (let x = 0; x < this.height; x++) {
             this.board[x] = new Array(width);
@@ -21,13 +26,22 @@ class MineSweeper {
                 this.board[x][y] = new Tile();
             }
         }
-        this.nb_mines = nb_mines;
-        if (nb_mines >= width * height) {
-            throw "nb_mine > nb_tiles";
-        }
-        this._is_lost = false;
+
+        this.reset();
+    }
+
+    public reset() {
         this._is_won = false;
-        this.remaining_tiles = width * height - nb_mines;
+        this._is_lost = false;
+        this.remaining_tiles = this.width * this.height - this.nb_mines;
+        for (let x = 0; x < this.height; x++) {
+            for (let y = 0; y < this.width; y++) {
+                let tile = this.board[x][y];
+                tile.flagged = false;
+                tile.uncovered = false;
+                tile.value = 0;
+            }
+        }
         this.add_mines();
         this.add_indicators();
     }

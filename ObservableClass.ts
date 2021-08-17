@@ -1,5 +1,5 @@
 
-abstract class ObservableClass<T> implements Observable<T> {
+abstract class ObservableClass<T extends ObservableClass<T>> implements Observable<T> {
     private observers: Observer<T>[];
 
     constructor() {
@@ -13,6 +13,6 @@ abstract class ObservableClass<T> implements Observable<T> {
         this.observers = this.observers.filter((item) => item != obs);
     }
     notifyObserver(): void {
-        this.observers.forEach((item) => item.update(this));
+        this.observers.forEach((item: Observer<T>) => item.update(this));
     }
 }
