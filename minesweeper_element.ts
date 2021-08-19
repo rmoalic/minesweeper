@@ -116,9 +116,14 @@ class MineSweeper_Element extends HTMLElement {
         this.status_text.textContent = "Ongoing";
         if (this.attributes_changed) {
             this.saveAttributes();
-            this.ms = new MineSweeper(this.height, this.width, this.mines);
-            const tiles_data = this.ms.get_board();
-            this.init_table(tiles_data);    
+            try {
+                this.ms = new MineSweeper(this.height, this.width, this.mines);
+                const tiles_data = this.ms.get_board();
+                this.init_table(tiles_data);    
+            } catch (e) {
+                this.status_text.textContent = "Error";
+                throw e;
+            }
         } else {
             this.ms.reset();
         }

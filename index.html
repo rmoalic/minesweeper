@@ -7,6 +7,14 @@
     <body>
         <ms-element height="16" width="25" mines="25"></ms-element>
         <button>Reset</button>
+        <form>
+            <label for="ms_height">Height</label>
+            <input id="ms_height" type="range" min="1" max="250" value="16">
+            <label for="ms_width">Width</label>
+            <input id="ms_width" type="range" min="1" max="250" value="25">
+            <label for="ms_mines">Mines</label>
+            <input id="ms_mines" type="range" min="1" max="250" value="25">
+        </form>
 
         <script src="./out/ObservableClass.js"></script>
         <script src="./out/tile_element.js"></script>
@@ -17,7 +25,13 @@
         <script>
             const button = document.getElementsByTagName("button")[0];
             const ms = document.getElementsByTagName("ms-element")[0];
+            const range_w = document.getElementById("ms_width");
+            const range_h = document.getElementById("ms_height");
+            const range_m = document.getElementById("ms_mines");
             button.onclick = () => (ms.reset());
-        </script>
+            range_w.oninput = () => (ms.setAttribute("width", range_w.value));
+            range_h.oninput = () => (ms.setAttribute("height", range_h.value));
+            range_m.oninput = () => (ms.setAttribute("mines", range_m.value));
+</script>
     </body>
 </html>
