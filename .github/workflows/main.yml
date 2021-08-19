@@ -18,6 +18,7 @@ jobs:
       run: tsc
     - name: Commit files
       run: |
+        rm .gitignore
         mv .git .git_old
         git init
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
