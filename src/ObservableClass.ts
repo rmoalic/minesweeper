@@ -13,6 +13,6 @@ abstract class ObservableClass<T extends ObservableClass<T>> implements Observab
         this.observers = this.observers.filter((item) => item != obs);
     }
     notifyObserver(): void {
-        this.observers.forEach((item: Observer<T>) => item.update(this));
+        this.observers.forEach((item: Observer<T>) => item.update(this as unknown as T));
     }
 }
