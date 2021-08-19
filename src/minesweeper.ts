@@ -9,12 +9,15 @@ class MineSweeper {
     private _is_lost!: boolean;
     private _is_won!: boolean;
     private remaining_tiles!: number;
+    private seed: number;
+    private _fake_random: boolean;
 
 
-    constructor(height: number, width: number, nb_mines: number) {
+    constructor(height: number, width: number, nb_mines: number, _fake_random: boolean = false) {
         this.height = height;
         this.width = width;
         this.nb_mines = nb_mines;
+        this.seed = 1;
         if (nb_mines >= width * height) {
             throw "nb_mine > nb_tiles";
         }
@@ -27,10 +30,12 @@ class MineSweeper {
             }
         }
 
+        this._fake_random = _fake_random;
         this.reset();
     }
 
     public reset() {
+        this.seed = 1;
         this._is_won = false;
         this._is_lost = false;
         this.remaining_tiles = this.width * this.height - this.nb_mines;
@@ -141,12 +146,13 @@ class MineSweeper {
     }
 
     private add_mines() {
+        let random = this._fake_random ? this.fake_random() : Math.random;
         for (let i = 0; i < this.nb_mines; i++) {
             let placed: boolean = false;
             let tries = 0;
             while (! placed) {
-                let x: number = Math.round(Math.random() * (this.height - 1));
-                let y: number = Math.round(Math.random() * (this.width - 1));
+                let x: number = Math.round(random() * (this.height - 1));
+                let y: number = Math.round(random() * (this.width - 1));
 
                 if (this.board[x][y].value != -1) {
                     this.board[x][y].value = -1;
@@ -206,6 +212,13 @@ class MineSweeper {
                 i++;
             }
             console.log(line.join());
+        }
+    }
+
+    private fake_random() {        
+        return () => {
+            var x = Math.sin(this.seed++) * 10000;
+            return x - Math.floor(x);
         }
     }
 }

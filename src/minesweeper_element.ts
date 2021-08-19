@@ -10,6 +10,7 @@ class MineSweeper_Element extends HTMLElement {
     private height: number;
     private width: number;
     private mines: number;
+    private fake_random: boolean;
 
 
     constructor() {
@@ -17,6 +18,7 @@ class MineSweeper_Element extends HTMLElement {
         this.height = 15;
         this.width  = 15;
         this.mines  = 10;
+        this.fake_random = false;
 
         this.attributes_changed = false;
         this.saveAttributes();
@@ -67,7 +69,7 @@ class MineSweeper_Element extends HTMLElement {
         this.game_board = document.createElement("div");
         this.game_board.classList.add("board");
 
-        this.ms = new MineSweeper(this.height, this.width, this.mines);
+        this.ms = new MineSweeper(this.height, this.width, this.mines, this.fake_random);
         const tiles_data = this.ms.get_board();
         this.init_table(tiles_data);
 
@@ -93,6 +95,7 @@ class MineSweeper_Element extends HTMLElement {
             if (tmp != null)
                 this.mines = Number.parseInt(tmp);
         }
+        this.fake_random = this.hasAttribute("fake_random");
     }
 
     private init_table(tiles_data: Tile[][]) {
@@ -117,7 +120,7 @@ class MineSweeper_Element extends HTMLElement {
         if (this.attributes_changed) {
             this.saveAttributes();
             try {
-                this.ms = new MineSweeper(this.height, this.width, this.mines);
+                this.ms = new MineSweeper(this.height, this.width, this.mines, this.fake_random);
                 const tiles_data = this.ms.get_board();
                 this.init_table(tiles_data);    
             } catch (e) {
@@ -155,11 +158,11 @@ class MineSweeper_Element extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null) {
-        if (newValue == null) return;
+        if (newValue == null && name !== "fake_random") return;
         //throw "changing attributes is not supported";
         this.attributes_changed = true;
     }
-    static get observedAttributes() {return ['width', 'height', 'mines']; }
+    static get observedAttributes() {return ['width', 'height', 'mines', 'fake_random']; }
 }
 
 customElements.define('ms-element', MineSweeper_Element);
