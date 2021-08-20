@@ -100,9 +100,9 @@ class MineSweeper_Element extends HTMLElement {
 
     private init_table(tiles_data: Tile[][]) {
         this.game_board.innerHTML = "";
-        for (let x = 0; x < this.height; x++) {
+        for (let y = this.height - 1; y >= 0; y--) {
             const ms_row = document.createElement("div");
-            for (let y = 0; y < this.width; y++) {
+            for (let x = 0; x < this.width; x++) {
                 const tile_value = new Tile_element();
                 tiles_data[x][y].registerObserver(tile_value);
                 tile_value.setAttribute("x", x.toString());

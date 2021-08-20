@@ -2,8 +2,8 @@
 
 class MineSweeper {
 
-    private height: number;
     private width: number;
+    private height: number;
     private board: Tile[][];
     private nb_mines: number;
     private _is_lost!: boolean;
@@ -14,18 +14,18 @@ class MineSweeper {
 
 
     constructor(height: number, width: number, nb_mines: number, _fake_random: boolean = false) {
-        this.height = height;
         this.width = width;
+        this.height = height;
         this.nb_mines = nb_mines;
         this.seed = 1;
-        if (nb_mines >= width * height) {
+        if (nb_mines >= height * width) {
             throw "nb_mine > nb_tiles";
         }
         
-        this.board = new Array(height);
-        for (let x = 0; x < this.height; x++) {
-            this.board[x] = new Array(width);
-            for (let y = 0; y < this.width; y++) {
+        this.board = new Array(width);
+        for (let x = 0; x < this.width; x++) {
+            this.board[x] = new Array(height);
+            for (let y = 0; y < this.height; y++) {
                 this.board[x][y] = new Tile();
             }
         }
@@ -38,9 +38,9 @@ class MineSweeper {
         this.seed = 1;
         this._is_won = false;
         this._is_lost = false;
-        this.remaining_tiles = this.width * this.height - this.nb_mines;
-        for (let x = 0; x < this.height; x++) {
-            for (let y = 0; y < this.width; y++) {
+        this.remaining_tiles = this.height * this.width - this.nb_mines;
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 let tile = this.board[x][y];
                 tile.flagged = false;
                 tile.uncovered = false;
@@ -65,9 +65,9 @@ class MineSweeper {
 
     play(x: number, y: number): boolean {
         if (x < 0) return true;
-        if (x >= this.height) return true;
+        if (x >= this.width) return true;
         if (y < 0) return true;
-        if (y >= this.width) return true;
+        if (y >= this.height) return true;
         if (this.board[x][y].flagged) return true;
         if (this._is_lost || this.is_won) return true;
 
@@ -94,9 +94,9 @@ class MineSweeper {
 
     flag(x: number, y: number) {
         if (x < 0) return;
-        if (x >= this.height) return;
+        if (x >= this.width) return;
         if (y < 0) return;
-        if (y >= this.width) return;
+        if (y >= this.height) return;
         if (this.board[x][y].uncovered) return;
         if (this._is_lost || this._is_won) return true;
 
@@ -112,9 +112,9 @@ class MineSweeper {
 
     private uncover_blanc_tiles(x: number, y: number) {
         if (x < 0) return;
-        if (x >= this.height) return;
+        if (x >= this.width) return;
         if (y < 0) return;
-        if (y >= this.width) return;
+        if (y >= this.height) return;
         if (this.board[x][y].uncovered) return;
 
         this.uncover_tile(x, y);
@@ -130,8 +130,8 @@ class MineSweeper {
     }
 
     private uncover_mines_and_flags(winning_move: boolean = false) {
-        for (let x = 0; x < this.height; x++) {
-            for (let y = 0; y < this.width; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 let b = this.board[x][y];
                 if (b.value == -1) {
                     if (winning_move && ! b.flagged) {
@@ -149,10 +149,10 @@ class MineSweeper {
         let random = this._fake_random ? this.fake_random() : Math.random;
         for (let i = 0; i < this.nb_mines; i++) {
             let placed: boolean = false;
-            let tries = 0;
+            let tries: number = 0;
             while (! placed) {
-                let x: number = Math.round(random() * (this.height - 1));
-                let y: number = Math.round(random() * (this.width - 1));
+                let x: number = Math.round(random() * (this.width - 1));
+                let y: number = Math.round(random() * (this.height - 1));
 
                 if (this.board[x][y].value != -1) {
                     this.board[x][y].value = -1;
@@ -168,9 +168,9 @@ class MineSweeper {
 
     private inc_tile(x: number, y: number) {
         if (x < 0) return;
-        if (x >= this.height) return;
+        if (x >= this.width) return;
         if (y < 0) return;
-        if (y >= this.width) return;
+        if (y >= this.height) return;
         if (this.board[x][y].value == -1) return;
 
         this.board[x][y].value++;
@@ -188,30 +188,12 @@ class MineSweeper {
     }
 
     private add_indicators() {
-        for (let x = 0; x < this.height; x++) {
-            for (let y = 0; y < this.width; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 if (this.board[x][y].value == -1) {
                     this.inc_square(x, y);
                 }
             }
-        }
-    }
-
-    print_board() {
-        for (let x = 0; x < this.height; x++) {
-            let line: (string|number)[] = new Array(this.width);
-            let i = 0;
-            for (let y = 0; y < this.width; y++) {
-                if (this.board[x][y].value == -1) {
-                    line[i] = "B";
-                } else if (this.board[x][y].value == 0) {
-                    line[i] = " ";
-                } else {
-                    line[i] = this.board[x][y].value;
-                }
-                i++;
-            }
-            console.log(line.join());
         }
     }
 
