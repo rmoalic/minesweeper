@@ -16,6 +16,8 @@ jobs:
         node-version: 15
     - name: tsc
       run: tsc
+    - name: webpack
+      run: npx webpack
     - name: Commit files
       run: |
         rm .gitignore

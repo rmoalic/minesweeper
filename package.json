@@ -8,6 +8,11 @@
   "author": "Robin Moalic",
   "license": "0BSD",
   "dependencies": {
+    "@kemet/kemet-modal": "^1.0.2",
     "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
   }
 }
