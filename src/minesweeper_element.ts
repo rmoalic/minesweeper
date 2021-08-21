@@ -150,8 +150,10 @@ class MineSweeper_Element extends HTMLElement {
 
         if (this.ms.is_won) {
             this.status_text.textContent = "WON !!!";
+            this.dispatchEvent(new Event("won"));
         } else if (this.ms.is_lost) {
             this.status_text.textContent = "lost :(";
+            this.dispatchEvent(new Event("lost"));
         }
 
         return false;

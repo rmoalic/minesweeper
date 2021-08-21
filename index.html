@@ -58,6 +58,8 @@
             const range_w = document.getElementById("ms_width");
             const range_h = document.getElementById("ms_height");
             const range_m = document.getElementById("ms_mines");
+            ms.addEventListener("won", () => (alert("Won !")));
+            //ms.addEventListener("lost", () => (alert("Lost :(")));
             button.onclick = () => (ms.reset());
             range_w.oninput = () => (ms.setAttribute("width", range_w.value));
             range_h.oninput = () => (ms.setAttribute("height", range_h.value));
