@@ -1,6 +1,6 @@
+import { Tile } from "./tile";
 
-
-class MineSweeper {
+export class MineSweeper {
 
     private width: number;
     private height: number;

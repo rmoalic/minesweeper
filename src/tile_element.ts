@@ -1,11 +1,13 @@
+import { Observer } from "./observer";
+import { Tile } from "./tile";
 
-
-class Tile_element extends HTMLElement implements Observer<Tile> {
+export class Tile_element extends HTMLElement implements Observer<Tile> {
 
     constructor() {
         super();
         this.update_element(0, false, false);
     }
+
     update(data: Tile): void {
         if (data == null) return;
         this.update_element(data.value, data.uncovered, data.flagged);

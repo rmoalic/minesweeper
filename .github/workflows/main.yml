@@ -16,10 +16,8 @@ jobs:
         node-version: 15
     - name: npm install
       run: npm install
-    - name: tsc
-      run: tsc
     - name: webpack
-      run: npx webpack
+      run: npx webpack --mode=production
     - name: Commit files
       run: |
         rm .gitignore

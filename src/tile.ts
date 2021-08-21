@@ -1,6 +1,6 @@
+import { ObservableClass } from "./ObservableClass";
 
-
-class Tile extends ObservableClass<Tile> {
+export class Tile extends ObservableClass<Tile> {
     private _value: number;
     private _uncovered: boolean;
     private _flagged: boolean;

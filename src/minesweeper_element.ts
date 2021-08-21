@@ -1,5 +1,9 @@
 
-class MineSweeper_Element extends HTMLElement {
+import { MineSweeper } from "./minesweeper";
+import { Tile } from "./tile";
+import { Tile_element } from "./tile_element";
+
+export class MineSweeper_Element extends HTMLElement {
 
     private ms: MineSweeper;
     private status_bar: HTMLDivElement;

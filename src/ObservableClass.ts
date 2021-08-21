@@ -1,5 +1,6 @@
+import { Observable, Observer } from "./observer";
 
-abstract class ObservableClass<T extends ObservableClass<T>> implements Observable<T> {
+export abstract class ObservableClass<T extends ObservableClass<T>> implements Observable<T> {
     private observers: Observer<T>[];
 
     constructor() {
