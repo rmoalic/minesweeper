@@ -3,18 +3,48 @@
     <head>
         <title>minesweeper</title>
         <meta charset="UTF-8">
+        <style>
+            form {
+                display: inline-block;
+                border: 1px dashed black;
+                padding: 5px;   
+            }
+            form label {
+                float: left;
+                width: 80px;
+            }
+            input {
+                background-color: khaki;
+                width: 50px;
+            }
+            ms-element {
+                display: inline-block;
+            }
+            .game_control {
+                margin-bottom: 10px;
+            }
+        </style>
     </head>
     <body>
         <ms-element height="16" width="25" mines="25"></ms-element>
-        <button>Reset</button>
+        <div class="game_control">
+            <button>Reset</button>
+        </div>
         <form>
-            <label for="ms_height">Height</label>
-            <input id="ms_height" type="range" min="1" max="250" value="16">
-            <label for="ms_width">Width</label>
-            <input id="ms_width" type="range" min="1" max="250" value="25">
-            <label for="ms_mines">Mines</label>
-            <input id="ms_mines" type="range" min="1" max="250" value="25">
+            <div>
+                <label for="ms_height">Height</label>
+                <input id="ms_height" type="number" value="16">
+            </div>
+            <div>
+                <label for="ms_width">Width</label>
+                <input id="ms_width" type="number" value="25">
+            </div>
+            <div>
+                <label for="ms_mines">Mines</label>
+                <input id="ms_mines" type="number" value="25">
+            </div>
         </form>
+
 
         <script src="./out/ObservableClass.js"></script>
         <script src="./out/tile_element.js"></script>
