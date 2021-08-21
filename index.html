@@ -91,6 +91,7 @@
 
         <script>
             window.onload = () => { document.getElementById("loading").style.display = "none" };
+            document.getElementsByTagName("form")[0].reset();
             const button = document.getElementById("ms_reset");
             const ms = document.getElementsByTagName("ms-element")[0];
             const range_w = document.getElementById("ms_width");
