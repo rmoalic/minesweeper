@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "compile": "tsc"
+    "compile": "npx webpack"
   },
   "author": "Robin Moalic",
   "license": "0BSD",
