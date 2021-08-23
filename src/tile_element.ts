@@ -25,10 +25,11 @@ export class Tile_element extends HTMLElement implements Observer<Tile> {
         } else {
             switch (value) {
                 case -1:
-                    this.textContent = "💣";
                     if (flagged) {
+                        this.textContent = "💣";
                         this.style.backgroundColor = "green";
                     } else {
+                        this.textContent = "💥";
                         this.style.backgroundColor = "red";
                     }
                     break;

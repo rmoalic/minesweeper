@@ -36,6 +36,7 @@ export class MineSweeper_Element extends HTMLElement {
             :host {
                 display: block;
                 contain: content;
+                font: 16px "DejaVu Sans", sans-serif;
             }
             :host([hidden]) {
                 display: none;
@@ -45,7 +46,7 @@ export class MineSweeper_Element extends HTMLElement {
                 width: 1.2em;
                 height: 1.2em;
                 border: 1px solid black;
-                text-align: center; 
+                text-align: center;
                 vertical-align: middle;
                 margin: 1px;
                 font-size: 20px;
@@ -87,7 +88,7 @@ export class MineSweeper_Element extends HTMLElement {
             if (tmp != null)
                 this.height = Number.parseInt(tmp);
         }
-        
+
         if (this.hasAttribute("width")) {
             const tmp = this.getAttribute("width")
             if (tmp != null)
@@ -126,7 +127,7 @@ export class MineSweeper_Element extends HTMLElement {
             try {
                 this.ms = new MineSweeper(this.height, this.width, this.mines, this.fake_random);
                 const tiles_data = this.ms.get_board();
-                this.init_table(tiles_data);    
+                this.init_table(tiles_data);
             } catch (e) {
                 this.status_text.textContent = "Error";
                 throw e;
