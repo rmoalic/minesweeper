@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>minesweeper</title>
+        <meta charset="UTF-8">
+        <style>
+            form {
+                display: inline-block;
+                border: 1px dashed black;
+                padding: 5px;   
+            }
+            form label {
+                float: left;
+                width: 80px;
+            }
+            input {
+                background-color: khaki;
+                width: 50px;
+            }
+            ms-element {
+                display: inline-block;
+            }
+            .game_control {
+                margin-bottom: 10px;
+            }
+            #modal div {
+                text-align: center;
+                margin: 0 auto;
+                background-color: #eee;
+                padding: 15px;
+                width: 90%;
+                max-width: 600px;
+                border-radius: 10px;
+            }
+            #modal div {
+                font-size: 40px;
+                font-weight: bold;
+            }
+            #modal button {
+                width: 100%;
+                font-weight: bold;
+                background-color: rgb(84, 135, 182);
+                border-radius: 10px;
+            }
+            #loading {
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 99;
+                background-color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loading">loading</div>
+        <ms-element id="game" height="16" width="25" mines="25"></ms-element>
+        <div class="game_control">
+            <button id="ms_reset">Reset</button>
+        </div>
+        <form>
+            <div>
+                <label for="ms_height">Height</label>
+                <input id="ms_height" type="number" value="16">
+            </div>
+            <div>
+                <label for="ms_width">Width</label>
+                <input id="ms_width" type="number" value="25">
+            </div>
+            <div>
+                <label for="ms_mines">Mines</label>
+                <input id="ms_mines" type="number" value="25">
+            </div>
+        </form>
+
+        <kemet-modal id="modal" effect="super-scaled" closeOnClick="true">
+            <div>
+              <p>You Won&nbsp;!!!</p>
+              <kemet-modal-close>
+                  <button>Ok</button>
+              </kemet-modal-close>
+            </div>
+        </kemet-modal>
+        <script src="./out/index_bundle.js"></script>
+        <script>
+            window.onload = () => { document.getElementById("loading").style.display = "none" };
+            document.getElementsByTagName("form")[0].reset();
+            const button = document.getElementById("ms_reset");
+            const ms = document.getElementsByTagName("ms-element")[0];
+            const range_w = document.getElementById("ms_width");
+            const range_h = document.getElementById("ms_height");
+            const range_m = document.getElementById("ms_mines");
+            let dialog = document.getElementById("modal");
+            ms.addEventListener("won", () => {
+                dialog.open();
+            });
+            //ms.addEventListener("lost", () => (alert("Lost :(")));
+            button.onclick = () => ms.reset();
+            range_w.oninput = () => ms.setAttribute("width", range_w.value);
+            range_h.oninput = () => ms.setAttribute("height", range_h.value);
+            range_m.oninput = () => ms.setAttribute("mines", range_m.value);
+        </script>
+    </body>
+</html>
