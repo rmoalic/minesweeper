@@ -21,7 +21,7 @@ export class MineSweeper {
         if (nb_mines >= height * width) {
             throw "nb_mine > nb_tiles";
         }
-        
+
         this.board = new Array(width);
         for (let x = 0; x < this.width; x++) {
             this.board[x] = new Array(height);
@@ -112,6 +112,7 @@ export class MineSweeper {
             if (c == undefined) continue;
             if (! this.inside(c.x, c.y)) continue;
             if (this.board[c.x][c.y].uncovered) continue;
+            if (this.board[c.x][c.y].flagged) continue;
 
             this.uncover_tile(c.x, c.y);
 
@@ -198,7 +199,7 @@ export class MineSweeper {
         return x >= 0 && x < this.width && y >= 0 && y < this.height;
     }
 
-    private fake_random() {        
+    private fake_random() {
         return () => {
             var x = Math.sin(this.seed++) * 10000;
             return x - Math.floor(x);
