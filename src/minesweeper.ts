@@ -64,10 +64,7 @@ export class MineSweeper {
     }
 
     play(x: number, y: number): boolean {
-        if (x < 0) return true;
-        if (x >= this.width) return true;
-        if (y < 0) return true;
-        if (y >= this.height) return true;
+        if (! this.inside(x, y)) return true;
         if (this.board[x][y].flagged) return true;
         if (this._is_lost || this.is_won) return true;
 
@@ -93,10 +90,7 @@ export class MineSweeper {
     }
 
     flag(x: number, y: number) {
-        if (x < 0) return;
-        if (x >= this.width) return;
-        if (y < 0) return;
-        if (y >= this.height) return;
+        if (! this.inside(x, y)) return;
         if (this.board[x][y].uncovered) return;
         if (this._is_lost || this._is_won) return true;
 
@@ -111,21 +105,27 @@ export class MineSweeper {
     }
 
     private uncover_blanc_tiles(x: number, y: number) {
-        if (x < 0) return;
-        if (x >= this.width) return;
-        if (y < 0) return;
-        if (y >= this.height) return;
-        if (this.board[x][y].uncovered) return;
+        let queue = [{x, y}];
 
-        this.uncover_tile(x, y);
+        while (queue.length > 0) {
+            let c = queue.pop();
+            if (c == undefined) continue;
+            if (! this.inside(c.x, c.y)) continue;
+            if (this.board[c.x][c.y].uncovered) continue;
 
-        if (this.board[x][y].value != 0) {
-            return;
-        } else {
-            this.uncover_blanc_tiles(x    , y - 1);
-            this.uncover_blanc_tiles(x    , y + 1);
-            this.uncover_blanc_tiles(x - 1, y    );
-            this.uncover_blanc_tiles(x + 1, y    );
+            this.uncover_tile(c.x, c.y);
+
+            if (this.board[c.x][c.y].value == 0) {
+                queue.push({x: c.x    , y: c.y - 1});
+                queue.push({x: c.x    , y: c.y + 1});
+                queue.push({x: c.x - 1, y: c.y    });
+                queue.push({x: c.x + 1, y: c.y    });
+                // TODO: check for corners after having found the edges
+                queue.push({x: c.x + 1, y: c.y - 1});
+                queue.push({x: c.x + 1, y: c.y + 1});
+                queue.push({x: c.x - 1, y: c.y - 1});
+                queue.push({x: c.x - 1, y: c.y + 1});
+            }
         }
     }
 
@@ -167,10 +167,7 @@ export class MineSweeper {
     }
 
     private inc_tile(x: number, y: number) {
-        if (x < 0) return;
-        if (x >= this.width) return;
-        if (y < 0) return;
-        if (y >= this.height) return;
+        if (! this.inside(x, y)) return;
         if (this.board[x][y].value == -1) return;
 
         this.board[x][y].value++;
@@ -195,6 +192,10 @@ export class MineSweeper {
                 }
             }
         }
+    }
+
+    private inside(x: number, y: number): boolean {
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
     }
 
     private fake_random() {        
